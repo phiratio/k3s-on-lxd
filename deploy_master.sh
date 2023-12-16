@@ -10,7 +10,7 @@ fi
 # Profile created in setup.sh
 profile=k3s
 
-lxc init images:ubuntu/bionic/amd64 --profile $profile $container_name
+lxc init ubuntu:22.04 --profile $profile $container_name
 lxc config device add "${container_name}" "kmsg" unix-char source="/dev/kmsg" path="/dev/kmsg"
 
 cat > install_k3s.sh << EOF
@@ -28,4 +28,4 @@ lxc exec $container_name -- bash /tmp/install_k3s.sh
 rm -rf install_k3s.sh
 k3sip=$(lxc list $container_name | grep eth0| head -1 | awk '{print $4}')
 echo "writing config to $(pwd)/kubeconfig"
-lxc exec $container_name -- bash -c "sed 's/127.0.0.1/$k3sip/g' /etc/rancher/k3s/k3s.yaml" > $(pwd)/kubeconfig
+lxc exec $container_name -- bash -c "sed 's/127.0.0.1/$k3sip/g' /etc/rancher/k3s/k3s.yaml" >> $(pwd)/kubeconfig

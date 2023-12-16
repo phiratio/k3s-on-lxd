@@ -19,7 +19,7 @@ profile="k3s"
 K3S_MASTER_IP=$(lxc list $K3S_MASTER_NAME | grep eth0| head -1 | awk '{print $4}')
 K3S_TOKEN_VALUE=$(lxc exec $K3S_MASTER_NAME -- bash -c "cat /var/lib/rancher/k3s/server/node-token")
 
-lxc init images:ubuntu/bionic/amd64 --profile $profile $container_name
+lxc init ubuntu:22.04 --profile $profile $container_name
 lxc config device add "${container_name}" "kmsg" unix-char source="/dev/kmsg" path="/dev/kmsg"
 
 cat > install_k3s.sh << EOF
